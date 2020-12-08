@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+    <context:component-scan base-package="com" use-default-filters="false">
+        <context:include-filter type="annotation"
+                                expression="org.springframework.stereotype.Controller"/>
+        <context:include-filter type="annotation"
+                                expression="org.springframework.web.bind.annotation.ControllerAdvice"/>
+    </context:component-scan>
+
+    <!--
+         InternalResourceViewResolver 视图解析器
+         没有视图解析器之前，我们在Controller中需要返回整完的跳转路径<br/>
+         有了视图解析器之后，我们只需要返回文件名即可，
+         比如说，如果我返回  return "ok";
+         则，这个ok会跟视图解析器中的前缀，后缀做字符串拼接操作。然后得到最终的跳转路径<br/>
+
+         最终的跳转路径是： 前缀 + ok + 后缀，得到结果是：  /WEB-INF/pages/ok.jsp
+
+         有了视图解析器之后，在Controller中，只需要返回文件名即可，这个文件名，我们管它叫：视图名。
+     -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 配置前缀 -->
+        <property name="prefix" value="/book/"/>
+        <!-- 配置后缀 -->
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!-- springMVC标配:支持静态资源和注释 -->
+    <mvc:default-servlet-handler></mvc:default-servlet-handler>
+    <mvc:annotation-driven></mvc:annotation-driven>
+
+    <!--<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <prop key="java.lang.Exception">error/error500</prop>
+                <prop key="java.lang.RuntimeException">error/error500</prop>
+                <prop key="java.lang.ArithmeticException">error/error500</prop>
+            </props>
+        </property>
+    </bean>-->
+</beans>
